@@ -1,0 +1,35 @@
+cabal-version:       >=1.10
+
+name:                dunai-live
+version:             0.7.0
+synopsis: Drop-in for dunai based on essence-of-live-coding
+description:
+-- bug-reports:
+license:             BSD3
+license-file:        LICENSE
+author:              Manuel Bärenz
+maintainer:          programming@manuelbaerenz.de
+category:            FRP
+build-type:          Simple
+extra-source-files:  CHANGELOG.md
+extra-doc-files:     README.md
+
+library
+  exposed-modules:
+    Control.Monad.Trans.MSF.Except
+    Control.Monad.Trans.MSF.Maybe
+    Control.Monad.Trans.MSF.Random
+    Control.Monad.Trans.MSF.Reader
+    Control.Monad.Trans.MSF.State
+    Control.Monad.Trans.MSF.Writer
+    Data.MonadicStreamFunction
+    Data.MonadicStreamFunction.Async
+    Data.MonadicStreamFunction.Instances.VectorSpace
+    Data.MonadicStreamFunction.InternalCore
+  build-depends:       base >= 4.9 && < 5
+                     , transformers           == 0.5.*
+                     , essence-of-live-coding >= 0.1
+                     , MonadRandom            >= 0.5
+                     , simple-affine-space    >= 0.1
+  hs-source-dirs:      src
+  default-language:    Haskell2010
