@@ -1,9 +1,9 @@
 {-# LANGUAGE Arrows #-}
 
-module Control.Monad.Trans.MSF.Except
-  ( module Control.Monad.Trans.MSF.Except
-  , module X
-  ) where
+module Control.Monad.Trans.MSF.Except (
+  module Control.Monad.Trans.MSF.Except,
+  module X,
+) where
 
 -- base
 import Data.Data
@@ -20,28 +20,30 @@ import LiveCoding.Exceptions.Finite as X
 -- dunai-live
 import Data.MonadicStreamFunction
 
-type MSFExcept m a b e = CellExcept m a b e
+type MSFExcept m a b e = CellExcept a b m e
 
 throwS :: Monad m => MSF (ExceptT e m) e a
 throwS = arrM throwE
 
+{-
 once :: (Monad m, Data e, Finite e) => (a -> m e) -> MSFExcept m a b e
 once f = try $ arrM (lift . f) >>> throwS
 
 once_ :: (Monad m, Data e, Finite e) => m e -> MSFExcept m a b e
 once_ = once . const
-
+-}
 throwOn' :: Monad m => MSF (ExceptT e m) (Bool, e) ()
-throwOn' = proc (b, e) -> if b
-  then throwS  -< e
-  else returnA -< ()
+throwOn' = proc (b, e) ->
+  if b
+    then throwS -< e
+    else returnA -< ()
 
 step :: (Monad m, Data e, Finite e) => (a -> m (b, e)) -> MSFExcept m a b e
 step f = try $ proc a -> do
-  n      <- sumC            -< 1
+  n <- sumC -< 1
   (b, e) <- arrM (lift . f) -< a
-  _      <- throwOn'        -< (n > (1 :: Int), e)
-  returnA                   -< b
+  _ <- throwOn' -< (n > (1 :: Int), e)
+  returnA -< b
 
 throwMaybe :: Monad m => MSF (ExceptT e m) (Maybe e) (Maybe a)
 throwMaybe = mapMaybeS throwS

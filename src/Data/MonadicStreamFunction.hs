@@ -15,8 +15,8 @@ import Data.Tuple (swap)
 import Data.VectorSpace
 
 -- essence-of-live-coding
-import LiveCoding.Cell as X hiding (step, Parallel)
-import LiveCoding.Cell.Feedback as X
+import LiveCoding.Cell as X hiding (step, Parallel, Sensor)
+import LiveCoding.Cell.Feedback as X hiding (Feedback)
 
 -- dunai-live
 import Data.MonadicStreamFunction.InternalCore as X
@@ -57,3 +57,6 @@ sumFrom n0 = feedback n0 $ proc (n, acc) -> returnA -< (acc, acc ^+^ n)
 
 mappendFrom :: (Data n, Monoid n, Monad m) => n -> MSF m n n
 mappendFrom = accumulateWith mappend
+
+mappendS :: (Data n, Monoid n, Monad m) => MSF m n n
+mappendS = mappendFrom mempty

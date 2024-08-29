@@ -16,7 +16,7 @@ import Data.VectorSpace
 import Data.MonadicStreamFunction
 
 -- | Vector-space instance for 'MSF's.
-instance (Monad m, VectorSpace v s) => VectorSpace (MSF m a v) s where
+instance (Floating s, Eq s, Monad m, VectorSpace v s) => VectorSpace (MSF m a v) s where
   zeroVector   = constantly zeroVector
   r   *^ msf   = msf >>^ (r *^)
   msf ^/ r     = msf >>^ (^/ r)
